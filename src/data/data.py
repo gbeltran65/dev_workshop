@@ -3,6 +3,8 @@ import pytest
 class TestData:
     def setup_method(self):
         self.data = Data()
+    def __init__(self):
+        pass
     
     def test_invertir_lista(self):
         # Test con lista de enteros
