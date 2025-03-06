@@ -44,6 +44,7 @@ class Data:
         return suma_esperada - suma_actual
 
     class Pila:
+     
      def __init__(self):
         self.items = []
 
@@ -62,7 +63,9 @@ class Data:
         if not self.is_empty():
             return self.items[-1]
         return None
-
+     
+    pila = Pila()
+    assert pila.is_empty() == True
 
 
     class Cola:
