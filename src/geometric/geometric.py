@@ -1,7 +1,9 @@
+import pytest
+from src.geometric.geometric import Geometric
 import math
-from math import pi
 
-class Geometria:
+
+class Geometric:
     """
     Clase con ejercicios geométricos en 2D y 3D.
     Incluye operaciones básicas y avanzadas de geometría.

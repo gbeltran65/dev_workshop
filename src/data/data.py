@@ -1,4 +1,6 @@
 import pytest
+from src.data import data
+Data = data.Data  # Esto evita el import circular
 
 class TestData:
     def setup_method(self):
