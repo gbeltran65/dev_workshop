@@ -1,119 +1,79 @@
-import pytest
-from src.data import data
-Data = data.Data  # Esto evita el import circular
+import math
 
-class TestData:
-    def setup_method(self):
-        self.data = Data()
-    def __init__(self):
-        pass
-    
-    def test_invertir_lista(self):
-        # Test con lista de enteros
-        assert self.data.invertir_lista([1, 2, 3, 4, 5]) == [5, 4, 3, 2, 1]
-        # Test con lista vacía
-        assert self.data.invertir_lista([]) == []
-        # Test con lista de un elemento
-        assert self.data.invertir_lista([42]) == [42]
-        # Test con lista de strings
-        assert self.data.invertir_lista(["a", "b", "c"]) == ["c", "b", "a"]
-    
-    def test_buscar_elemento(self):
-        # Test con elemento presente
-        assert self.data.buscar_elemento([10, 20, 30, 40, 50], 30) == 2
-        # Test con elemento no presente
-        assert self.data.buscar_elemento([10, 20, 30, 40, 50], 60) == -1
-        # Test con elemento repetido (debe retornar el primer índice)
-        assert self.data.buscar_elemento([10, 20, 30, 20, 50], 20) == 1
-        # Test con lista vacía
-        assert self.data.buscar_elemento([], 42) == -1
-    
-    def test_eliminar_duplicados(self):
-        # Test con lista con duplicados
-        assert self.data.eliminar_duplicados([1, 2, 2, 3, 4, 4, 5]) == [1, 2, 3, 4, 5]
-        # Test con lista sin duplicados
-        assert self.data.eliminar_duplicados([1, 2, 3, 4, 5]) == [1, 2, 3, 4, 5]
-        # Test con lista vacía
-        assert self.data.eliminar_duplicados([]) == []
-        # Test con valores de diferentes tipos
-        assert self.data.eliminar_duplicados([1, "a", 1, "a", True]) == [1, "a", True]
-    
-    def test_merge_ordenado(self):
-        # Test con listas de enteros ordenadas
-        assert self.data.merge_ordenado([1, 3, 5], [2, 4, 6]) == [1, 2, 3, 4, 5, 6]
-        # Test con una lista vacía
-        assert self.data.merge_ordenado([], [1, 2, 3]) == [1, 2, 3]
-        # Test con ambas listas vacías
-        assert self.data.merge_ordenado([], []) == []
-        # Test con listas con elementos repetidos
-        assert self.data.merge_ordenado([1, 2, 3], [1, 3, 5]) == [1, 1, 2, 3, 3, 5]
-    
-    def test_rotar_lista(self):
-        # Test con rotación positiva
-        assert self.data.rotar_lista([1, 2, 3, 4, 5], 2) == [4, 5, 1, 2, 3]
-        # Test con rotación mayor que longitud de la lista
-        assert self.data.rotar_lista([1, 2, 3], 5) == [2, 3, 1]
-        # Test con rotación cero
-        assert self.data.rotar_lista([1, 2, 3], 0) == [1, 2, 3]
-        # Test con lista vacía
-        assert self.data.rotar_lista([], 3) == []
-    
-    def test_encuentra_numero_faltante(self):
-        # Test con número faltante en el medio
-        assert self.data.encuentra_numero_faltante([1, 2, 4, 5]) == 3
-        # Test con número faltante al principio
-        assert self.data.encuentra_numero_faltante([2, 3, 4, 5]) == 1
-        # Test con número faltante al final
-        assert self.data.encuentra_numero_faltante([1, 2, 3, 4]) == 5
-    
-    def test_es_subconjunto(self):
-        # Test con subconjunto verdadero
-        assert self.data.es_subconjunto([1, 2], [1, 2, 3, 4]) == True
-        # Test con no subconjunto
-        assert self.data.es_subconjunto([1, 5], [1, 2, 3, 4]) == False
-        # Test con conjuntos iguales
-        assert self.data.es_subconjunto([1, 2, 3], [1, 2, 3]) == True
-        # Test con conjunto vacío
-        assert self.data.es_subconjunto([], [1, 2, 3]) == True
-    
-    def test_implementar_pila(self):
-        pila = self.data.implementar_pila()
-        # Test de pila vacía
-        assert pila.is_empty() == True
-        # Test de push y peek
-        pila["push"](1)
-        assert pila["peek"]() == 1
-        pila["push"](2)
-        assert pila["peek"]() == 2
-        # Test de pop
-        assert pila["pop"]() == 2
-        assert pila["pop"]() == 1
-        assert pila.is_empty() == True
-    
-    def test_implementar_cola(self):
-        cola = self.data.implementar_cola()
-        # Test de cola vacía
-        assert cola.is_empty() == True
-        # Test de enqueue y peek
-        cola["enqueue"](1)
-        assert cola["peek"]() == 1
-        cola["enqueue"](2)
-        assert cola["peek"]() == 1
-        # Test de dequeue
-        assert cola["dequeue"]() == 1
-        assert cola["dequeue"]() == 2
-        assert cola.is_empty() == True
-    
-    def test_matriz_transpuesta(self):
-        # Test con matriz 2x3
-        matriz = [[1, 2, 3], [4, 5, 6]]
-        resultado = [[1, 4], [2, 5], [3, 6]]
-        assert self.data.matriz_transpuesta(matriz) == resultado
-        # Test con matriz cuadrada
-        matriz = [[1, 2], [3, 4]]
-        resultado = [[1, 3], [2, 4]]
-        assert self.data.matriz_transpuesta(matriz) == resultado
-        # Test con matriz 1x1
-        assert self.data.matriz_transpuesta([[5]]) == [[5]]
-        # Test con matriz vacía
-        assert self.data.matriz_transpuesta([]) == []
+class Data:
+    def invertir_lista(self, lista):
+        invertida = []
+        for i in range(len(lista) - 1, -1, -1):
+            invertida.append(lista[i])
+        return invertida
+
+    def buscar_elemento(self, lista, elemento):
+        for i, valor in enumerate(lista):
+            if valor == elemento:
+                return i
+        return -1
+
+    def eliminar_duplicados(self, lista):
+        vistos = {}
+        resultado = []
+        for elemento in lista:
+            if (type(elemento), elemento) not in vistos:
+                vistos[(type(elemento), elemento)] = True
+                resultado.append(elemento)
+        return resultado
+
+    def merge_ordenado(self, lista1, lista2):
+        i, j = 0, 0
+        resultado = []
+        while i < len(lista1) and j < len(lista2):
+            if lista1[i] < lista2[j]:
+                resultado.append(lista1[i])
+                i += 1
+            else:
+                resultado.append(lista2[j])
+                j += 1
+        resultado.extend(lista1[i:])
+        resultado.extend(lista2[j:])
+        return resultado
+
+    def rotar_lista(self, lista, k):
+        if not lista:
+            return []
+        k = k % len(lista)
+        return lista[-k:] + lista[:-k]
+
+    def encuentra_numero_faltante(self, lista):
+        n = len(lista) + 1
+        suma_total = n * (n + 1) // 2
+        suma_lista = sum(lista)
+        return suma_total - suma_lista
+
+    def es_subconjunto(self, conjunto1, conjunto2):
+        conjunto2_set = set(conjunto2)
+        for elemento in conjunto1:
+            if elemento not in conjunto2_set:
+                return False
+        return True
+
+    def implementar_pila(self):
+        pila = []
+        return {
+            "push": lambda x: pila.append(x),
+            "pop": lambda: pila.pop() if pila else None,
+            "peek": lambda: pila[-1] if pila else None,
+            "is_empty": lambda: len(pila) == 0
+        }
+
+    def implementar_cola(self):
+        cola = []
+        return {
+            "enqueue": lambda x: cola.append(x),
+            "dequeue": lambda: cola.pop(0) if cola else None,
+            "peek": lambda: cola[0] if cola else None,
+            "is_empty": lambda: len(cola) == 0
+        }
+
+    def matriz_transpuesta(self, matriz):
+        if not matriz:
+            return []
+        return [[matriz[j][i] for j in range(len(matriz))] for i in range(len(matriz[0]))]
